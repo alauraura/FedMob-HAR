@@ -35,11 +35,12 @@ def fit_config(server_round: int):
 
 # 1. Função que ensina o servidor a calcular a média de acurácia dos clientes
 def weighted_average(metrics):
+    # Agrega a acurácia dos clientes ponderada pela quantidade de dados de cada um
     accuracies = [num_examples * m["accuracy"] for num_examples, m in metrics]
     examples = [num_examples for num_examples, _ in metrics]
     return {"accuracy": sum(accuracies) / sum(examples)}
 
-# 2. Adição da função de agregação na Estratégia
+# Atualize a configuração da estratégia adicionando a agregação de métricas
 strategy = fl.server.strategy.FedAvg(
     fraction_fit=1.0, 
     fraction_evaluate=1.0,
@@ -48,7 +49,7 @@ strategy = fl.server.strategy.FedAvg(
     min_available_clients=len(sujeitos),
     on_fit_config_fn=fit_config,
     on_evaluate_config_fn=fit_config,
-    evaluate_metrics_aggregation_fn=weighted_average # NOVO
+    evaluate_metrics_aggregation_fn=weighted_average  # Nova linha
 )
 
 if __name__ == "__main__":
