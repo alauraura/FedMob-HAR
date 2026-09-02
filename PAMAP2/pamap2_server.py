@@ -1,6 +1,6 @@
 import flwr as fl
 import numpy as np
-from client import HARClient
+from pamap2_client import HARClient
 
 # 1. Carregamento dos dados federados engarrafados
 DATA_PATH = "/content/drive/MyDrive/Datasets/PAMAP2/pamap2_federated.npz"

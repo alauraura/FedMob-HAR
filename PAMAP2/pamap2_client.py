@@ -2,10 +2,9 @@ import flwr as fl
 import torch
 from collections import OrderedDict
 from torch.utils.data import DataLoader
-
-from models import CNN1D_HAR
-from dataset import HARDatasetFederado
-from engine import train_model, evaluate_model
+from pamap2_models import CNN1D_HAR
+from pamap2_dataset import HARDatasetFederado
+from pamap2_engine import train_model, evaluate_model
 
 class HARClient(fl.client.NumPyClient):
     def __init__(self, cid, X_train, y_train, X_test, y_test):
