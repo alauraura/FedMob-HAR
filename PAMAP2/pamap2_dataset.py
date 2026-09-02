@@ -11,7 +11,8 @@ def apply_scaling(X, scale_factor=1.5):
 
 def apply_sensor_drop(X, start_col, end_col):
     X_dropped = X.copy()
-    X_dropped[:, :, start_col:end_col] = 0.0
+    # Corrige o fatiamento de 3D para 2D (timesteps, canais)
+    X_dropped[:, start_col:end_col] = 0.0
     return X_dropped
 
 class HARDatasetFederado(Dataset):
