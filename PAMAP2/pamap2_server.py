@@ -2,16 +2,16 @@ import flwr as fl
 import numpy as np
 from pamap2_client import HARClient
 
-# 1. Carregamento dos dados federados engarrafados
-DATA_PATH = "/content/drive/MyDrive/Datasets/PAMAP2/pamap2_federated.npz"
-dataset_fed = np.load(DATA_PATH, allow_pickle=True)
-
-# Os 8 sujeitos válidos do PAMAP2 que você pré-processou
+# 1. Os 8 sujeitos válidos do PAMAP2
 sujeitos = [101, 102, 103, 104, 105, 106, 107, 108] 
 
-# 2. Criação dinâmica dos clientes para a simulação
+# 2. Criação dinâmica dos clientes carregando os dados localmente no escopo do cliente
 def client_fn(cid: str) -> fl.client.Client:
     subject_id = sujeitos[int(cid)]
+    
+    # Carrega o .npz diretamente dentro da função do cliente (evita erro de serialização do Ray)
+    DATA_PATH = "/content/drive/MyDrive/Datasets/PAMAP2/pamap2_federated.npz"
+    dataset_fed = np.load(DATA_PATH, allow_pickle=True)
     client_data = dataset_fed[f'client_{subject_id}'].item()
     
     return HARClient(
@@ -24,7 +24,6 @@ def client_fn(cid: str) -> fl.client.Client:
 
 # 3. O Relógio do Concept Drift
 def fit_config(server_round: int):
-    """Aciona a mobilidade em blocos de rodadas."""
     contexto = "base"
     
     if 10 <= server_round < 20:
